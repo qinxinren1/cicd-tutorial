@@ -1,0 +1,2 @@
+# From the job-pilot/ directory:
+#   pip install -e ".[dev]"

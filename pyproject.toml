@@ -1,0 +1,43 @@
+# Recommended venv: ~/.venvs/job-pilot (outside iCloud Desktop) — avoids UF_HIDDEN on .pth files
+# that break editable installs. Create: python3.11 -m venv ~/.venvs/job-pilot
+# then: ~/.venvs/job-pilot/bin/pip install -e ".[enrich]"
+# Fallback if .pth stays hidden: bash scripts/repair-macos-venv-pth.sh <venv>
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "jobpilot"
+version = "0.1.0"
+description = "Job Apply Pilot — shared core and stage packages"
+requires-python = ">=3.11"
+dependencies = [
+    "python-jobspy>=1.1.82,<2",
+    "PyYAML>=6.0.3,<7",
+    "pandas>=2,<3",
+    "beautifulsoup4>=4.12,<5",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8,<9"]
+enrich = ["playwright>=1.40,<2"]
+tailor = [
+    "openai>=1.40,<2",
+    "python-dotenv>=1.0,<2",
+    "weasyprint>=60,<64",
+    "playwright>=1.40,<2",
+]
+apply = [
+    "playwright>=1.40,<2",
+    "python-dotenv>=1.0,<2",
+]
+
+[project.scripts]
+jobpilot = "jobpilot_core.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["core", "stages/discovery", "stages/enrich", "stages/tailor", "stages/apply"]
+
+[tool.pytest.ini_options]
+testpaths = ["core/tests"]
